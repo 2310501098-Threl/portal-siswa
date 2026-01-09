@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selamat Datang</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .dashboard-container {
+            background-color: #fff;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-container h2 {
+            font-size: 28px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .dashboard-container p {
+            font-size: 16px;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .btn-service {
+            padding: 18px 25px;
+            font-size: 17px;
+            font-weight: 600;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-service:nth-child(1) {
+            background-color: #3498db;
+        }
+
+        .btn-service:nth-child(2) {
+            background-color: #e74c3c;
+        }
+
+        .btn-service:nth-child(3) {
+            background-color: #2ecc71;
+        }
+
+        .btn-service:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-service i {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>SELAMAT DATANG 👋</h2>
+        <p>Siswa</p>
+        <p>PILIH LAYANAN</p>
+        <div class="btn-group">
+            <a class="btn-service" href="data_pribadi.html">
+                <i class="fas fa-file-alt"></i> FORMULIR DATA DIRI
+            </a>
+            <a class="btn-service" href="form-pengaduan.html">
+                <i class="fas fa-exclamation-triangle"></i> LAPORAN PENGADUAN UMUM
+            </a>
+            <a class="btn-service" href="wbs1.html">
+                <i class="fas fa-bullhorn"></i> WHISTLE BLOWING SYSTEM
+            </a>
+        </div>
+    </div>
+</body>
+</html>

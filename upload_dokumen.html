@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pendaftaran - Unggah Dokumen</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --background-light: #f4f7f9;
+            --card-background: #ffffff;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: var(--card-background);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 850px;
+            max-width: 95%;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .title {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            width: calc(100% - 60px);
+            height: 3px;
+            background-color: var(--border-color);
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step .circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            color: var(--card-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: background-color 0.4s ease, transform 0.3s ease;
+        }
+
+        .step.active .circle {
+            background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .step.completed .circle {
+            background-color: var(--success-color);
+            transform: scale(1.1);
+        }
+
+        .step-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .step.completed + .step::before,
+        .step.completed + .step.active::before {
+            background-color: var(--success-color);
+        }
+
+        .step-indicator .step:nth-child(4).completed::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--success-color);
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .step-indicator .step:nth-child(5).active::before {
+            background: linear-gradient(to right, var(--success-color) 50%, var(--border-color) 50%);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .form-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .file-upload-container {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .file-upload-container:hover {
+            border-color: var(--primary-color);
+            background-color: #eaf5ff;
+        }
+
+        .file-upload-container input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .upload-note {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 5px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--card-background);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .form-group.invalid .file-upload-container {
+            border-color: var(--danger-color);
+            background-color: #fff4f4;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="title">FORMULIR PENDAFTARAN</h1>
+
+        <div class="step-indicator">
+            <div class="step completed">
+                <div class="circle">1</div>
+                <span class="step-label">Data Pribadi</span>
+            </div>
+            <div class="step completed">
+                <div class="circle">2</div>
+                <span class="step-label">Data Institusi & Kontak</span>
+            </div>
+            <div class="step completed">
+                <div class="circle">3</div>
+                <span class="step-label">Kontak Darurat</span>
+            </div>
+            <div class="step completed">
+                <div class="circle">4</div>
+                <span class="step-label">Pendidikan</span>
+            </div>
+            <div class="step active">
+                <div class="circle">5</div>
+                <span class="step-label">Unggah Dokumen</span>
+            </div>
+        </div>
+
+        <form id="upload-form">
+            <div class="form-section">
+                <h2>Data Pendukung</h2>
+
+                <div class="form-group" id="pas-foto-group">
+                    <label for="pas-foto-input">Unggah Pas Foto</label>
+                    <div class="file-upload-container" onclick="document.getElementById('pas-foto-input').click()">
+                        <div class="upload-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        </div>
+                        <span class="upload-text">Pilih File</span>
+                        <span class="file-name" id="pas-foto-text"></span>
+                        <input type="file" id="pas-foto-input" name="pas-foto" accept=".jpg,.jpeg,.png">
+                    </div>
+                    <span class="error-message">Mohon unggah pas foto.</span>
+                    <small class="upload-note">Format: .jpg atau .png, Ukuran maksimal: 2MB</small>
+                </div>
+
+                <div class="form-group" id="passport-group" style="display:none;">
+                    <label for="foto-passport-input">Unggah Foto Passport</label>
+                    <div class="file-upload-container" onclick="document.getElementById('foto-passport-input').click()">
+                        <div class="upload-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-upload"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        </div>
+                        <span class="upload-text">Pilih File</span>
+                        <span class="file-name" id="foto-passport-text"></span>
+                        <input type="file" id="foto-passport-input" name="foto-passport" accept=".jpg,.jpeg,.png">
+                    </div>
+                    <span class="error-message">Mohon unggah foto paspor.</span>
+                    <small class="upload-note">Format: .jpg atau .png <br> Catatan: Wajib diisi bagi Warga Negara Asing!</small>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='pendidikan.html'">Kembali</button>
+                <button class="btn btn-primary" type="submit">Lanjut</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('upload-form');
+        const pasFotoInput = document.getElementById('pas-foto-input');
+        const fotoPassportInput = document.getElementById('foto-passport-input');
+        const passportGroup = document.getElementById('passport-group');
+        
+        // Ambil data kewarganegaraan dari localStorage
+        const personalData = JSON.parse(localStorage.getItem('personalData'));
+        const kewarganegaraan = personalData ? personalData['kewarganegaraan'] : '';
+
+        // Fungsi untuk menampilkan nama file yang dipilih
+        function updateFileName(inputId, textId) {
+            const input = document.getElementById(inputId);
+            const textElement = document.getElementById(textId);
+            input.addEventListener("change", function() {
+                if (this.files.length > 0) {
+                    textElement.textContent = this.files[0].name;
+                } else {
+                    textElement.textContent = "";
+                }
+                const formGroup = input.closest('.form-group');
+                formGroup.classList.remove('invalid');
+                formGroup.querySelector('.error-message').style.display = 'none';
+            });
+        }
+
+        // Fungsi untuk memuat data tersimpan dari Local Storage
+        function loadSavedData() {
+            const savedData = localStorage.getItem('dokumenData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                if (data['pas-foto-input']) {
+                    document.getElementById('pas-foto-text').textContent = data['pas-foto-input'];
+                }
+                if (data['foto-passport-input']) {
+                    document.getElementById('foto-passport-text').textContent = data['foto-passport-input'];
+                }
+            }
+        }
+
+        // Panggil fungsi untuk setiap input file
+        updateFileName("pas-foto-input", "pas-foto-text");
+        updateFileName("foto-passport-input", "foto-passport-text");
+
+        // Tampilkan atau sembunyikan kolom paspor berdasarkan kewarganegaraan
+        if (kewarganegaraan === 'Warga Negara Asing (WNA)') {
+            passportGroup.style.display = 'block';
+        } else {
+            passportGroup.style.display = 'none';
+        }
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let formIsValid = true;
+            const dokumenData = {};
+            // 🔥 DEFINISIKAN filesToRead di sini
+            const filesToRead = []; 
+
+            // Validasi pas foto
+            const pasFotoGroup = document.getElementById('pas-foto-group');
+            if (pasFotoInput.files.length === 0) {
+                // Periksa apakah sudah ada data tersimpan
+                if (!localStorage.getItem('dokumenData') || !JSON.parse(localStorage.getItem('dokumenData'))['pas-foto-input']) {
+                    pasFotoGroup.classList.add('invalid');
+                    pasFotoGroup.querySelector('.error-message').style.display = 'block';
+                    formIsValid = false;
+                } else {
+                    // Jika file lama ada, ambil nama file lama
+                    dokumenData['pas-foto-input'] = JSON.parse(localStorage.getItem('dokumenData'))['pas-foto-input'];
+                }
+            } else {
+                // Jika file baru diunggah
+                dokumenData['pas-foto-input'] = pasFotoInput.files[0].name;
+                // Tambahkan file ini untuk diproses (Base64)
+                filesToRead.push({ input: pasFotoInput, key: 'pasFotoFile' }); 
+            }
+
+            // Validasi foto paspor jika wajib diisi
+            if (kewarganegaraan === 'Warga Negara Asing (WNA)') {
+                if (fotoPassportInput.files.length === 0) {
+                    // Periksa apakah sudah ada data tersimpan
+                    if (!localStorage.getItem('dokumenData') || !JSON.parse(localStorage.getItem('dokumenData'))['foto-passport-input']) {
+                        passportGroup.classList.add('invalid');
+                        passportGroup.querySelector('.error-message').style.display = 'block';
+                        formIsValid = false;
+                    } else {
+                         // Jika file lama ada, ambil nama file lama
+                        dokumenData['foto-passport-input'] = JSON.parse(localStorage.getItem('dokumenData'))['foto-passport-input'];
+                    }
+                } else {
+                    // Jika file baru diunggah
+                    dokumenData['foto-passport-input'] = fotoPassportInput.files[0].name;
+                    // Tambahkan file ini untuk diproses (Base64)
+                    filesToRead.push({ input: fotoPassportInput, key: 'fotoPassportFile' });
+                }
+            }
+
+            if (formIsValid) {
+                // Simpan nama file (nama baru atau nama lama yang tersimpan)
+                localStorage.setItem('dokumenData', JSON.stringify(dokumenData));
+
+                if (filesToRead.length > 0) {
+                    let filesProcessed = 0;
+                    filesToRead.forEach(fileObj => {
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            // Simpan konten file (Base64) di Local Storage
+                            localStorage.setItem(fileObj.key, event.target.result);
+                            filesProcessed++;
+                            
+                            // Cek apakah semua file sudah selesai diproses
+                            if (filesProcessed === filesToRead.length) {
+                                window.location.href = 'konfirmasi.html';
+                            }
+                        };
+                        reader.readAsDataURL(fileObj.input.files[0]);
+                    });
+                } else {
+                    // Jika tidak ada file baru yang perlu di-Base64-kan (menggunakan data lama)
+                    // Pindah halaman langsung
+                    window.location.href = 'konfirmasi.html';
+                }
+            }
+        });
+
+        // Panggil fungsi untuk memuat data saat halaman dimuat
+        loadSavedData();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pendaftaran - Kontak Darurat</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545; /* Tambah variabel untuk warna error */
+            --background-light: #f4f7f9;
+            --card-background: #ffffff;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: var(--card-background);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 850px;
+            max-width: 95%;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .title {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            width: calc(100% - 60px);
+            height: 3px;
+            background-color: var(--border-color);
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step .circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            color: var(--card-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: background-color 0.4s ease, transform 0.3s ease;
+        }
+
+        .step.active .circle {
+            background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .step.completed .circle {
+            background-color: var(--success-color);
+            transform: scale(1.1);
+        }
+
+        .step-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        /* Gaya tambahan untuk garis penghubung yang telah selesai */
+        .step.completed + .step::before,
+        .step.completed + .step.active::before {
+            background-color: var(--success-color);
+        }
+        
+        .step-indicator .step:nth-child(2).completed::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--success-color);
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .step-indicator .step:nth-child(3).active::before {
+            background: linear-gradient(to right, var(--success-color) 50%, var(--border-color) 50%);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        
+        .form-section:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .form-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        
+        /* Gaya untuk input yang tidak valid */
+        .form-group.invalid input,
+        .form-group.invalid textarea {
+            border-color: var(--danger-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            color: var(--text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .form-group.full-width {
+            flex: 100%;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--card-background);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="title">FORMULIR PENDAFTARAN</h1>
+        <div class="step-indicator">
+            <div class="step completed">
+                <div class="circle">1</div>
+                <span class="step-label">Data Pribadi</span>
+            </div>
+            <div class="step completed">
+                <div class="circle">2</div>
+                <span class="step-label">Data Institusi & Kontak</span>
+            </div>
+            <div class="step active">
+                <div class="circle">3</div>
+                <span class="step-label">Kontak Darurat</span>
+            </div>
+            <div class="step">
+                <div class="circle">4</div>
+                <span class="step-label">Pendidikan</span>
+            </div>
+            <div class="step">
+                <div class="circle">5</div>
+                <span class="step-label">Upload Dokumen</span>
+            </div>
+        </div>
+        <form id="kontak-darurat-form">
+            <div class="form-section">
+                <h2>Kontak Darurat</h2>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="nama-keluarga">Nama keluarga yang dapat dihubungi</label>
+                        <input type="text" id="nama-keluarga" name="nama-keluarga" placeholder="Masukkan nama keluarga">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="telp-keluarga">Nomor telepon/HP keluarga yang dapat dihubungi</label>
+                        <input type="text" id="nomor-telepon-hp-keluarga" name="nomor-telepon-hp-keluarga" placeholder="Masukkan nomor telepon/HP">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="alamat-keluarga">Alamat Keluarga yang dapat dihubungi</label>
+                        <textarea id="alamat-keluarga" name="alamat-keluarga" rows="3" placeholder="Masukkan alamat keluarga"></textarea>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='data_institusi.html'">Kembali</button>
+                <button class="btn btn-primary" type="submit">Lanjut</button>
+            </div>
+        </form>
+    </div>
+
+   <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('kontak-darurat-form');
+
+        // Fungsi untuk memuat data tersimpan dari Local Storage
+        function loadSavedData() {
+            const savedData = localStorage.getItem('kontakDaruratData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                for (const key in data) {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = data[key];
+                    }
+                }
+            }
+        }
+
+        // Event listener untuk tombol submit
+        form.addEventListener('submit', function(event) {
+            event.preventDefault(); // Mencegah form submit default
+
+            let allFieldsValid = true;
+            const formData = {}; // Objek untuk menyimpan data
+
+            // Ambil semua elemen input dan textarea yang ada di dalam form
+            const formElements = form.querySelectorAll('input, textarea');
+
+            formElements.forEach(element => {
+                const formGroup = element.closest('.form-group');
+                const errorMessage = formGroup.querySelector('.error-message');
+                
+                // Cek validasi
+                if (element.value.trim() === "") {
+                    if (errorMessage) {
+                        formGroup.classList.add('invalid');
+                        errorMessage.style.display = 'block';
+                        allFieldsValid = false;
+                    }
+                } else {
+                    formGroup.classList.remove('invalid');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }
+
+                // Kumpulkan data ke dalam objek formData
+                formData[element.id] = element.value.trim();
+            });
+
+            // Jika semua validasi berhasil, simpan data dan lanjutkan
+            if (allFieldsValid) {
+                // Simpan data ke localStorage dengan kunci 'kontakDaruratData'
+                localStorage.setItem('kontakDaruratData', JSON.stringify(formData));
+                
+                // Arahkan ke halaman berikutnya
+                window.location.href = 'pendidikan.html';
+            } else {
+                alert('Mohon lengkapi semua data yang wajib diisi.');
+            }
+        });
+
+        // Event listener untuk menghapus pesan error saat input diisi
+        const formElementsForInput = form.querySelectorAll('input, textarea');
+        formElementsForInput.forEach(element => {
+            element.addEventListener('input', function() {
+                const formGroup = this.closest('.form-group');
+                const errorMessage = formGroup.querySelector('.error-message');
+                if (this.value.trim() !== "") {
+                    formGroup.classList.remove('invalid');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        // Panggil fungsi untuk memuat data saat halaman dimuat
+        loadSavedData();
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pendaftaran - Data Pribadi</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --background-light: #f4f7f9;
+            --card-background: #ffffff;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: var(--card-background);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 850px;
+            max-width: 95%;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .title {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            width: calc(100% - 60px);
+            height: 3px;
+            background-color: var(--border-color);
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step .circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            color: var(--card-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: background-color 0.4s ease, transform 0.3s ease;
+        }
+
+        .step.active .circle {
+            background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .step.completed .circle {
+            background-color: var(--success-color);
+            transform: scale(1.1);
+        }
+
+        .step-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        
+        .form-section:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .form-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        
+        .form-group.invalid input,
+        .form-group.invalid select {
+            border-color: var(--danger-color);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            color: var(--text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .form-group.full-width {
+            flex: 100%;
+        }
+
+        .form-group .radio-group {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .form-group .radio-group .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group .radio-group .radio-item input[type="radio"] {
+            width: auto;
+        }
+
+        .form-group .radio-group .radio-item label {
+            font-weight: 400;
+            color: var(--text-light);
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+        
+        .error-message {
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+            font-style: italic;
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--card-background);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="title">FORMULIR PENDAFTARAN</h1>
+        <div class="step-indicator">
+            <div class="step active">
+                <div class="circle">1</div>
+                <span class="step-label">Data Pribadi</span>
+            </div>
+            <div class="step">
+                <div class="circle">2</div>
+                <span class="step-label">Data Institusi & Kontak</span>
+            </div>
+            <div class="step">
+                <div class="circle">3</div>
+                <span class="step-label">Kontak Darurat</span>
+            </div>
+            <div class="step">
+                <div class="circle">4</div>
+                <span class="step-label">Pendidikan</span>
+            </div>
+            <div class="step">
+                <div class="circle">5</div>
+                <span class="step-label">Upload Dokumen</span>
+            </div>
+        </div>
+        <form id="personal-data-form">
+            <div class="form-section">
+                <h2>Data Pribadi</h2>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="nama-lengkap">Nama Lengkap</label>
+                        <input type="text" id="nama-lengkap" name="nama-lengkap" placeholder="Masukkan Nama Lengkap Anda">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pangkat">Pangkat/Gol/Ruang/Korps</label>
+                        <input type="text" id="pangkat" name="pangkat" placeholder="Masukkan Pangkat/Gol/Ruang/Korps">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="nrp">NRP/NIP</label>
+                        <input type="text" id="nrp" name="nrp">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tempat-lahir">Tempat Lahir</label>
+                        <input type="text" id="tempat-lahir" name="tempat-lahir" placeholder="Masukkan Tempat Lahir">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tanggal-lahir">Tanggal Lahir</label>
+                        <input type="date" id="tanggal-lahir" name="tanggal-lahir">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-section">
+                <h2>Kategori dan Status</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="kategori-usia">Kategori Usia</label>
+                        <select id="kategori-usia" name="kategori-usia">
+                            <option value="">Pilih</option>
+                            <option value="20-30">20-30</option>
+                            <option value="31-40">31-40</option>
+                            <option value="41-50">41-50</option>
+                            <option value=">50">>50</option>
+                        </select>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Kelamin</label>
+                        <div class="radio-group" id="jenis-kelamin-group">
+                            <div class="radio-item">
+                                <input type="radio" id="laki-laki" name="jenis-kelamin" value="Laki-laki">
+                                <label for="laki-laki">Laki-laki</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="perempuan" name="jenis-kelamin" value="Perempuan">
+                                <label for="perempuan">Perempuan</label>
+                            </div>
+                        </div>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="status-pernikahan">Status Pernikahan</label>
+                        <select id="status-pernikahan" name="status-pernikahan">
+                            <option value="">Pilih</option>
+                            <option value="Menikah">Menikah</option>
+                            <option value="Belum Menikah">Belum Menikah</option>
+                            <option value="Duda">Duda</option>
+                            <option value="Janda">Janda</option>
+                        </select>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="agama">Agama</label>
+                        <select id="agama" name="agama" onchange="toggleLainnya('agama-lainnya', this)">
+                            <option value="">Pilih</option>
+                            <option value="Islam">Islam</option>
+                            <option value="Kristen Protestan">Kristen Protestan</option>
+                            <option value="Katolik">Katolik</option>
+                            <option value="Hindu">Hindu</option>
+                            <option value="Budha">Budha</option>
+                            <option value="Khonghucu">Khonghucu</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="text" id="agama-lainnya" name="agama-lainnya" placeholder="Tuliskan Agama" style="display:none; margin-top:10px;">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h2>Keterangan Ukuran dan Akomodasi</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ukuran-kemeja">Ukuran Kemeja</label>
+                        <select id="ukuran-kemeja" name="ukuran-kemeja" onchange="toggleLainnya('kemeja-lainnya', this)">
+                            <option value="">Pilih</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="text" id="kemeja-lainnya" name="kemeja-lainnya" placeholder="Tuliskan ukuran lain" style="display:none; margin-top:10px;">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="ukuran-training">Ukuran Training Pack</label>
+                        <select id="ukuran-training" name="ukuran-training" onchange="toggleLainnya('training-lainnya', this)">
+                            <option value="">Pilih</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="text" id="training-lainnya" name="training-lainnya" placeholder="Tuliskan ukuran lain" style="display:none; margin-top:10px;">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="akomodasi-mess">Akomodasi mess selama kursus</label>
+                        <select id="akomodasi-mess" name="akomodasi-mess" onchange="toggleLainnya('akomodasi-lainnya', this)">
+                            <option value="">Pilih</option>
+                            <option value="Sigra I">Sigra I</option>
+                            <option value="Sigra II">Sigra II</option>
+                            <option value="Kowan TNI">Kowan TNI</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <input type="text" id="akomodasi-lainnya" name="akomodasi-lainnya" placeholder="Tuliskan akomodasi lain" style="display:none; margin-top:10px;">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="keterangan-lain">Keterangan lain</label>
+                        <input type="text" id="keterangan-lain" name="keterangan-lain" placeholder="Masukkan keterangan tambahan jika ada">
+                    </div>
+                </div>
+            </div>
+            <div class="form-section">
+                <h2>Identitas Kewarganegaraan</h2>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="kewarganegaraan">Kewarganegaraan</label>
+                        <select id="kewarganegaraan" name="kewarganegaraan" onchange="togglePassportField()">
+                            <option value="">Pilih</option>
+                            <option value="Warga Negara Indonesia (WNI)">Warga Negara Indonesia (WNI)</option>
+                            <option value="Warga Negara Asing (WNA)">Warga Negara Asing (WNA)</option>
+                        </select>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row" id="nomor-id-group" style="display:none;">
+                    <div class="form-group full-width">
+                        <label for="no-id-passport">Nomor ID/Passport</label>
+                        <input type="text" id="no-id-passport" name="no-id-passport">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='pilih-kursus.html'">Kembali</button>
+                <button class="btn btn-primary" type="submit">Lanjut</button>
+            </div>
+        </form>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('personal-data-form');
+
+    // Fungsi untuk memuat data dari Local Storage
+    function loadSavedData() {
+        const savedData = localStorage.getItem('personalData');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            for (const key in data) {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.type === 'radio') {
+                        const radioElement = document.querySelector(`input[name="${key}"][value="${data[key]}"]`);
+                        if (radioElement) {
+                            radioElement.checked = true;
+                        }
+                    } else {
+                        element.value = data[key];
+                        // Menangani input 'Lainnya' yang ditampilkan
+                        if (key.endsWith('-lainnya') && data[key]) {
+                            element.style.display = 'block';
+                            // Memastikan opsi 'Lainnya' di select terkait juga terpilih
+                            const selectId = key.replace('-lainnya', '');
+                            const selectElement = document.getElementById(selectId);
+                            if (selectElement) {
+                                selectElement.value = "Lainnya";
+                            }
+                        }
+                    }
+                }
+            }
+            togglePassportField();
+        }
+    }
+
+    // Fungsi untuk menampilkan/menyembunyikan input "Lainnya"
+    window.toggleLainnya = function(id, selectElement) {
+        const inputLainnya = document.getElementById(id);
+        if (selectElement.value === "Lainnya") {
+            inputLainnya.style.display = "block";
+            inputLainnya.focus();
+        } else {
+            inputLainnya.style.display = "none";
+            inputLainnya.value = "";
+        }
+    }
+
+    // Fungsi untuk menampilkan/menyembunyikan field Nomor ID/Passport
+    function togglePassportField() {
+        const kewarganegaraan = document.getElementById('kewarganegaraan').value;
+        const nomorIdGroup = document.getElementById('nomor-id-group');
+        // PERBAIKAN: Mengganti 'nomor-id' menjadi 'no-id-passport'
+        const nomorIdInput = document.getElementById('no-id-passport'); 
+        const nomorIdError = nomorIdGroup.querySelector('.error-message');
+
+        if (kewarganegaraan === 'Warga Negara Asing (WNA)') {
+            nomorIdGroup.style.display = 'flex';
+        } else {
+            nomorIdGroup.style.display = 'none';
+            if (nomorIdInput) nomorIdInput.value = '';
+            nomorIdGroup.classList.remove('invalid');
+            if (nomorIdError) nomorIdError.style.display = 'none';
+        }
+    }
+
+    loadSavedData();
+    togglePassportField();
+
+    // Event listener onchange sudah didefinisikan di dalam HTML dan di-link di sini
+    document.getElementById('kewarganegaraan').onchange = togglePassportField;
+
+    // Submit handler
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        let allFieldsValid = true;
+        const formData = {};
+
+        const formGroups = form.querySelectorAll('.form-group');
+
+        formGroups.forEach(formGroup => {
+            // Hanya ambil elemen input/select yang tidak berjenis radio, kecuali ada radio group
+            const inputOrSelect = formGroup.querySelector('input:not([type="radio"]), select, textarea');
+            const radioGroup = formGroup.querySelector('.radio-group');
+            const errorMessage = formGroup.querySelector('.error-message');
+            let isValid = true;
+            let isSkipped = false;
+
+            if (radioGroup) {
+                // Logika validasi untuk Radio Group (Jenis Kelamin)
+                const checkedRadio = radioGroup.querySelector('input[type="radio"]:checked');
+                if (!checkedRadio) {
+                    isValid = false;
+                } else {
+                    formData[checkedRadio.name] = checkedRadio.value;
+                }
+            } else if (inputOrSelect) {
+                // Logika validasi untuk Input/Select/Textarea
+                
+                // Menentukan apakah field ini opsional
+                const isOptional =
+                    inputOrSelect.id === 'keterangan-lain' ||
+                    // PERBAIKAN: Mengganti 'nomor-id' menjadi 'no-id-passport'
+                    (inputOrSelect.id === 'no-id-passport' && document.getElementById('kewarganegaraan').value === 'Warga Negara Indonesia (WNI)') ||
+                    (inputOrSelect.id.endsWith('-lainnya') && inputOrSelect.style.display === 'none'); // Input 'Lainnya' yang tersembunyi
+
+                // Menentukan apakah form group ini tersembunyi (seperti Nomor ID saat WNI)
+                if (inputOrSelect.id === 'no-id-passport' && document.getElementById('nomor-id-group').style.display === 'none') {
+                    isSkipped = true;
+                }
+                
+                const value = inputOrSelect.value.trim();
+
+                if (value === '' && !isOptional && !isSkipped) {
+                    isValid = false;
+                } else if (!isSkipped) {
+                    // Hanya simpan data jika field tidak di-skip (tidak tersembunyi)
+                    if (inputOrSelect.id.endsWith('-lainnya') && value !== '') {
+                        // Jika input 'lainnya' diisi, simpan nilainya, dan jangan simpan nilai select "Lainnya"
+                        formData[inputOrSelect.id] = value;
+                    } else if (!inputOrSelect.id.endsWith('-lainnya')) {
+                        // Simpan nilai input/select standar
+                        formData[inputOrSelect.id] = value;
+                    }
+                }
+            }
+
+            if (!isValid) {
+                formGroup.classList.add('invalid');
+                if (errorMessage) errorMessage.style.display = 'block';
+                allFieldsValid = false;
+            } else {
+                formGroup.classList.remove('invalid');
+                if (errorMessage) errorMessage.style.display = 'none';
+            }
+        });
+
+        if (allFieldsValid) {
+            // Menyimpan semua data yang valid
+            localStorage.setItem('personalData', JSON.stringify(formData));
+            window.location.href = 'data_institusi.html';
+        } else {
+            alert('Mohon lengkapi semua data yang wajib diisi.');
+        }
+    });
+
+    // Hapus error saat input berubah
+    const formElements = form.querySelectorAll('input, select, textarea');
+    formElements.forEach(element => {
+        element.addEventListener('input', function() {
+            const formGroup = this.closest('.form-group');
+            const errorMessage = formGroup.querySelector('.error-message');
+            if (this.value.trim() !== "") {
+                formGroup.classList.remove('invalid');
+                if (errorMessage) errorMessage.style.display = 'none';
+            }
+        });
+        element.addEventListener('change', function() {
+            const formGroup = this.closest('.form-group');
+            const errorMessage = formGroup.querySelector('.error-message');
+            if (this.value !== "" && this.value !== "Pilih") {
+                formGroup.classList.remove('invalid');
+                if (errorMessage) errorMessage.style.display = 'none';
+            }
+            if (this.type === 'radio' && this.checked) {
+                // Untuk radio, cek parent group (yang punya span.error-message)
+                document.getElementById(this.name + '-group').closest('.form-group').classList.remove('invalid');
+                document.getElementById(this.name + '-group').closest('.form-group').querySelector('.error-message').style.display = 'none';
+            }
+        });
+    });
+});
+</script>
+</body>
+</html>

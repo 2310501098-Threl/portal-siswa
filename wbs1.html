@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>WHISTLE BLOWING SYSTEM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        /* --- VARIABLES & BASE STYLES --- */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-light: #f4f7f9;
+            --card-background: #ffffff;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --border-color: #e0e0e0;
+            --input-border: #ced4da;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-hover: rgba(0, 123, 255, 0.3);
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px;
+            margin: 0;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card-background);
+            padding: 40px 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid var(--border-color);
+        }
+
+        .title {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 0.95em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* --- FORM --- */
+        .form-section {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .section-title {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Error styling for sections */
+        .form-section.error .checkbox-container {
+            border-color: var(--danger-color) !important;
+        }
+
+        .form-section.error .checkmark {
+            border-color: var(--danger-color) !important;
+        }
+
+        /* Error styling for fields */
+        .form-field.error input,
+        .form-field.error textarea,
+        .form-section.error textarea {
+            border-color: var(--danger-color) !important;
+        }
+
+        /* Checkbox tiles */
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .checkbox-container {
+            position: relative;
+            cursor: pointer;
+            font-size: 15px;
+            user-select: none;
+            background: #e9ecef;
+            border-radius: 10px;
+            padding: 12px 18px 12px 45px;
+            transition: all 0.3s ease;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            border: 1px solid transparent;
+        }
+
+        .checkbox-container:hover {
+            background-color: #dee2e6;
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            height: 22px;
+            width: 22px;
+            background-color: var(--card-background);
+            border: 2px solid var(--input-border);
+            border-radius: 6px;
+            transform: translateY(-50%);
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-container input:checked ~ .checkmark {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .checkbox-container input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .checkbox-container .checkmark:after {
+            left: 7px;
+            top: 3px;
+            width: 6px;
+            height: 12px;
+            border: solid var(--card-background);
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+
+        .instruction {
+            color: #888;
+            font-size: 0.8em;
+            margin-top: 8px;
+            display: block;
+        }
+
+        #lainnya-input {
+            margin-top: 20px;
+            display: none;
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            width: 100%;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        #lainnya-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+            outline: none;
+        }
+
+        /* Inputs & textarea */
+        textarea, input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            resize: vertical;
+            transition: box-shadow 0.3s, border-color 0.3s;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        textarea:focus, input[type="text"]:focus, input[type="date"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 150px;
+        }
+
+        .flex-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-field {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .input-with-icon {
+            position: relative;
+            width: 100%;
+        }
+
+        .input-with-icon input {
+            width: 100%;
+        }
+
+        .word-count {
+            text-align: right;
+            font-size: 0.75em;
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+
+        /* Buttons */
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .back-button {
+            background-color: var(--secondary-color);
+            color: var(--card-background);
+        }
+
+        .back-button:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .next-button {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+        }
+
+        .next-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 30px; }
+            .flex-group { flex-direction: column; }
+            .button-container { justify-content: center; flex-direction: column-reverse; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">WHISTLE BLOWING SYSTEM</h1>
+        <p class="subtitle">Laporkan dugaan pelanggaran dengan aman, anonim, dan kerahasiaan terjaga.</p>
+
+        <form id="wbsForm" novalidate>
+            <div class="form-section" id="jenis-pelanggaran-section">
+                <label class="section-title">Jenis pelanggaran/kecurangan *</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-container">
+                        <i class="fas fa-hand-holding-usd"></i> Gratifikasi
+                        <input type="checkbox" name="jenis[]" value="Gratifikasi">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <i class="fas fa-coins"></i> Korupsi
+                        <input type="checkbox" name="jenis[]" value="Korupsi">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <i class="fas fa-money-bill-wave"></i> Pungli
+                        <input type="checkbox" name="jenis[]" value="Pungli">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <i class="fas fa-user-slash"></i> Penipuan
+                        <input type="checkbox" name="jenis[]" value="Penipuan">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <i class="fas fa-hand-fist"></i> Pelecehan
+                        <input type="checkbox" name="jenis[]" value="Pelecehan">
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container" id="lainnya-checkbox-label">
+                        <i class="fas fa-ellipsis-h"></i> Yang Lain
+                        <input type="checkbox" name="jenis[]" value="Lainnya" id="lainnya-checkbox">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <input type="text" id="lainnya-input" name="lainnya_deskripsi" placeholder="Tulis jenis pelanggaran lainnya">
+                <span class="instruction">Anda dapat memilih lebih dari satu</span>
+                <span class="error-message">Anda harus memilih setidaknya satu jenis pelanggaran.</span>
+            </div>
+
+            <div class="form-section">
+                <label class="section-title" for="deskripsi">Deskripsi Kejadian (rinci) *</label>
+                <textarea id="deskripsi" name="deskripsi" class="required" placeholder="Jelaskan apa yang terjadi, siapa saja yang terlibat, waktu dan tempat..."></textarea>
+                <span class="error-message">Deskripsi kejadian wajib diisi.</span>
+            </div>
+
+            <div class="form-section">
+                <label class="section-title" for="kronologi">Kronologi Kejadian *</label>
+                <textarea id="kronologi" name="kronologi" class="required" placeholder="Urutkan kejadian per waktu (timeline) secara jelas dan terstruktur."></textarea>
+                <span class="error-message">Kronologi kejadian wajib diisi.</span>
+            </div>
+
+            <div class="form-section flex-group">
+                <div class="form-field">
+                    <label class="section-title" for="lokasi">Lokasi Kejadian *</label>
+                    <input type="text" id="lokasi" name="lokasi" class="required" placeholder="Contoh: Gedung A, Lantai 3, Ruang 301">
+                    <span class="error-message">Lokasi kejadian wajib diisi.</span>
+                </div>
+                <div class="form-field">
+                    <label class="section-title" for="waktu">Waktu Kejadian - Tanggal *</label>
+                    <input type="date" id="waktu" name="waktu" class="required">
+                    <span class="error-message">Tanggal kejadian wajib diisi.</span>
+                </div>
+            </div>
+
+            <div class="form-section flex-group">
+                <div class="form-field">
+                    <label class="section-title" for="nama_pihak">Nama pihak terkait *</label>
+                    <input type="text" id="nama_pihak" name="nama_pihak" class="required" placeholder="Tuliskan nama lengkap pihak yang terlibat">
+                    <span class="error-message">Nama pihak wajib diisi.</span>
+                </div>
+                <div class="form-field">
+                    <label class="section-title" for="jabatan">Jabatan *</label>
+                    <input type="text" id="jabatan" name="jabatan" class="required" placeholder="Contoh: Dosen/Staff/Manajer">
+                    <span class="error-message">Jabatan wajib diisi.</span>
+                </div>
+                <div class="form-field">
+                    <label class="section-title" for="bidang">Bidang/unit *</label>
+                    <input type="text" id="bidang" name="bidang" class="required" placeholder="Contoh: Akademik/Keuangan/SDM">
+                    <span class="error-message">Bidang/unit wajib diisi.</span>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <label class="section-title" for="dampak">Dampak Kejadian (jika ada)</label>
+                <textarea id="dampak" name="dampak" placeholder="Contoh: kerugian materiil, gangguan operasional, psikologis, atau reputasi..."></textarea>
+                <p class="word-count" id="dampakCount">0 / 1000</p>
+            </div>
+            
+            <div class="form-section" id="anon-section">
+                <label class="section-title">Kerahasiaan Pelapor</label>
+                <label class="checkbox-container">
+                <i class="fas fa-user-secret"></i> Kirim laporan ini secara anonim
+                <input type="checkbox" id="anon" name="anon" value="1">
+                <span class="checkmark"></span>
+            </label>
+             <span class="instruction">Jika dicentang, identitas Anda tidak akan dicatat dalam sistem.</span>
+          </div>
+
+            <div class="button-container">
+                <a href="#" class="button back-button" id="backBtn"><i class="fas fa-arrow-left"></i> Kembali</a>
+                <button type="button" class="button next-button" id="nextBtn">Lanjut <i class="fas fa-arrow-right"></i></button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logika untuk menampilkan/menyembunyikan input "Lainnya"
+            const lainnyaCheckbox = document.getElementById('lainnya-checkbox');
+            const lainnyaInput = document.getElementById('lainnya-input');
+            const nextBtn = document.getElementById('nextBtn');
+            const form = document.getElementById('wbsForm');
+            const anonCheckbox = document.getElementById('anon');
+
+            lainnyaCheckbox.addEventListener('change', function() {
+                lainnyaInput.style.display = this.checked ? 'block' : 'none';
+                if (this.checked) {
+                    lainnyaInput.classList.add('required');
+                } else {
+                    lainnyaInput.classList.remove('required');
+                }
+            });
+
+            // Hitung karakter untuk textarea 'dampak'
+            const dampak = document.getElementById('dampak');
+            const dampakCount = document.getElementById('dampakCount');
+            if (dampak && dampakCount) {
+                dampak.addEventListener('input', function() {
+                    const len = this.value.length;
+                    dampakCount.textContent = len + ' / 1000';
+                });
+            }
+            
+            // --- VALIDASI FORMULIR PADA KLIK TOMBOL LANJUT ---
+            nextBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                let formIsValid = true;
+
+                // Hapus semua visual error sebelumnya
+                document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+
+                // Validasi Checkbox (Jenis Pelanggaran)
+                const checkboxGroup = document.getElementById('jenis-pelanggaran-section');
+                const checkedCheckboxes = document.querySelectorAll('input[name="jenis[]"]:checked');
+                if (checkedCheckboxes.length === 0) {
+                    checkboxGroup.classList.add('error');
+                    checkboxGroup.querySelector('.error-message').style.display = 'block';
+                    formIsValid = false;
+                }
+
+                // Validasi input wajib lainnya dengan kelas '.required'
+                const requiredInputs = document.querySelectorAll('.required');
+                requiredInputs.forEach(input => {
+                    const parentField = input.closest('.form-field') || input.closest('.form-section');
+                    if (input.value.trim() === '') {
+                        parentField.classList.add('error');
+                        parentField.querySelector('.error-message').style.display = 'block';
+                        formIsValid = false;
+                    }
+                });
+                
+                // Cek apakah pelapor ingin anonim
+               const isAnon = anonCheckbox && anonCheckbox.checked;
+               if (isAnon) {
+                  console.log("Laporan dikirim secara anonim.");
+               } else {
+                  console.log("Laporan dikirim dengan identitas user (non-anonim).");
+               }
+
+                // Jika semua validasi berhasil, lanjutkan ke halaman berikutnya
+                if (formIsValid) {
+                    alert("Formulir valid, melanjutkan ke halaman berikutnya!");
+                    window.location.href = 'wbs2.html'; // Tautan yang sudah diperbaiki
+                } else {
+                    alert("Mohon lengkapi semua data yang wajib diisi.");
+                }
+            });
+
+            // Navigasi tombol kembali
+            document.getElementById('backBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                history.back();
+            });
+        });
+    </script>
+</body>
+</html>

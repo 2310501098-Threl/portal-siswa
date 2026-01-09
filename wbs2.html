@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WHISTLE BLOWING SYSTEM - Lanjutan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        /* --- VARIABLES & BASE STYLES --- */
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --background-light: #f4f7f9;
+            --card-background: #ffffff;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --border-color: #e0e0e0;
+            --input-border: #ced4da;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-hover: rgba(0, 123, 255, 0.3);
+            --danger-color: #dc3545;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px;
+            margin: 0;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card-background);
+            padding: 40px 60px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            width: 100%;
+            max-width: 900px;
+            border: 1px solid var(--border-color);
+        }
+
+        .title {
+            color: var(--primary-color);
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: var(--secondary-color);
+            font-size: 0.95em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* --- FORM STYLES --- */
+        .form-section {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .section-title {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 0.85em;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Error styling for fields */
+        .form-field.error input,
+        .form-field.error textarea,
+        .form-section.error textarea {
+            border-color: var(--danger-color) !important;
+        }
+        
+        .form-section.error .file-upload-container {
+            border-color: var(--danger-color);
+        }
+
+        .form-section.error .radio-checkmark {
+            border-color: var(--danger-color);
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            resize: vertical;
+            transition: box-shadow 0.3s, border-color 0.3s;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 150px;
+        }
+
+        .flex-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-field {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .input-with-icon .fas {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .word-count {
+            text-align: right;
+            font-size: 0.75em;
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+        
+        /* File Upload */
+        .file-upload-container {
+            border: 2px dashed var(--input-border);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        .file-upload-container:hover {
+            border-color: var(--primary-color);
+            background-color: #eaf5ff;
+        }
+
+        .file-upload-container .upload-icon {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .file-upload-container:hover .upload-icon {
+            color: #0056b3;
+        }
+
+        .file-upload-container p {
+            margin: 0;
+            font-size: 1em;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        #file-name {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: var(--secondary-color);
+            display: block;
+        }
+
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            margin-top: 10px;
+        }
+
+        .radio-container {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 15px;
+            user-select: none;
+        }
+
+        .radio-container input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-checkmark {
+            height: 22px;
+            width: 22px;
+            background-color: var(--card-background);
+            border: 2px solid var(--input-border);
+            border-radius: 50%;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .radio-container input:checked ~ .radio-checkmark {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
+        }
+
+        .radio-checkmark:after {
+            content: "";
+            display: block;
+            position: relative;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--card-background);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .radio-container input:checked ~ .radio-checkmark:after {
+            opacity: 1;
+        }
+
+        /* Buttons */
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .reset-button {
+            background-color: var(--secondary-color);
+            color: var(--card-background);
+        }
+
+        .reset-button:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .submit-button {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 30px; }
+            .flex-group { flex-direction: column; }
+            .button-container { justify-content: center; flex-direction: column-reverse; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">WHISTLE BLOWING SYSTEM</h1>
+        <p class="subtitle">Kolom bertanda * wajib diisi. Unggah hanya 1 berkas dengan ukuran maksimal 10 MB.</p>
+        
+        <form id="wbsForm2" novalidate>
+            <div class="form-section">
+                <label for="alasan" class="section-title">Alasan Pelaporan *</label>
+                <textarea id="alasan" name="alasan" class="required" placeholder="Jelaskan alasan Anda mengajukan laporan ini secara rinci."></textarea>
+                <span class="error-message">Alasan pelaporan wajib diisi.</span>
+            </div>
+
+            <div class="form-section flex-group">
+                <div class="form-field">
+                    <label for="saksi_nama" class="section-title">Nama Saksi (jika ada)</label>
+                    <input type="text" id="saksi_nama" name="saksi_nama" placeholder="Contoh: Budi Santoso">
+                </div>
+                <div class="form-field">
+                    <label for="saksi_kontak" class="section-title">Kontak Saksi (jika ada)</label>
+                    <input type="text" id="saksi_kontak" name="saksi_kontak" placeholder="Contoh: 0812xxxx / email@domain.id">
+                </div>
+            </div>
+            <p class="instruction" style="margin-top: -15px;">Anda dapat menuliskan format: Nama - No.HP/Email</p>
+
+            <div class="form-section">
+                <label for="bukti_lain" class="section-title">Bukti lain yang mendukung laporan</label>
+                <textarea id="bukti_lain" name="bukti_lain" placeholder="Daftar atau uraian bukti lain seperti tautan dokumen, nomor laporan, atau deskripsi bukti fisik."></textarea>
+                <p class="word-count" id="buktiLainCount">0 / 500</p>
+            </div>
+
+            <div class="form-section" id="bukti-section">
+                <label class="section-title">Bukti Pendukung (1 file, maks 10MB) *</label>
+                <div class="file-upload-container" onclick="document.getElementById('buktiFile').click()">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <p>Seret & jatuhkan file di sini atau **klik untuk memilih**</p>
+                    <span id="fileName"></span>
+                    <input type="file" id="buktiFile" name="bukti_pendukung" class="required" style="display: none;">
+                </div>
+                <p class="instruction" style="margin-top: 10px;">Jenis file: gambar, video, PDF, dokumen. Maks. 10 MB.</p>
+                <span class="error-message">Bukti pendukung wajib diunggah.</span>
+            </div>
+
+            <div class="form-section" id="privasi-section">
+                <label class="section-title">Apakah ada kekhawatiran mengenai keamanan/privasi pelapor? *</label>
+                <div class="radio-group">
+                    <label class="radio-container">Ada
+                        <input type="radio" name="privasi" value="ada">
+                        <span class="radio-checkmark"></span>
+                    </label>
+                    <label class="radio-container">Tidak ada
+                        <input type="radio" name="privasi" value="tidak_ada">
+                        <span class="radio-checkmark"></span>
+                    </label>
+                </div>
+                <span class="error-message">Pilihan ini wajib diisi.</span>
+            </div>
+
+            <div class="button-container">
+                <button type="button" class="button reset-button" onclick="history.back()"><i class="fas fa-arrow-left"></i> Kembali</button>
+                <button type="submit" class="button submit-button"><i class="fas fa-paper-plane"></i> Kirim Laporan</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Ambil status anonim dari localStorage ---
+    const anonimValue = localStorage.getItem('pilihanAnonim');
+
+    if (anonimValue) {
+        console.log("Status pelapor:", anonimValue); // misal 'ya' atau 'tidak'
+        
+        // Tambahkan teks status pelapor di atas form
+        const info = document.createElement('p');
+        info.textContent = `Status Pelapor: ${anonimValue === 'ya' ? 'Anonim' : 'Teridentifikasi'}`;
+        info.style.fontWeight = '600';
+        info.style.color = '#007bff';
+        info.style.textAlign = 'center';
+        info.style.marginBottom = '20px';
+
+        const container = document.querySelector('.container');
+        const formElement = document.querySelector('form');
+        if (container && formElement) {
+            container.insertBefore(info, formElement);
+        }
+    }
+
+    // --- Menampilkan nama file yang dipilih ---
+    const buktiFile = document.getElementById('buktiFile');
+    const fileNameSpan = document.getElementById('fileName');
+    if (buktiFile && fileNameSpan) {
+        buktiFile.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                fileNameSpan.textContent = this.files[0].name;
+            } else {
+                fileNameSpan.textContent = '';
+            }
+        });
+    }
+
+    // --- VALIDASI FORMULIR SAAT SUBMIT ---
+    const form = document.getElementById('wbsForm2');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            let formIsValid = true;
+
+            // Hapus semua visual error sebelumnya
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.form-section.error').forEach(el => el.classList.remove('error'));
+
+            // 1. Validasi Alasan Pelaporan
+            const alasan = document.getElementById('alasan');
+            if (alasan && alasan.value.trim() === '') {
+                alasan.closest('.form-section').classList.add('error');
+                alasan.closest('.form-section').querySelector('.error-message').style.display = 'block';
+                formIsValid = false;
+            }
+
+            // 2. Validasi Bukti Pendukung (File Upload)
+            const buktiSection = document.getElementById('bukti-section');
+            if (buktiFile && buktiSection && buktiFile.files.length === 0) {
+                buktiSection.classList.add('error');
+                buktiSection.querySelector('.error-message').style.display = 'block';
+                formIsValid = false;
+            }
+
+            // 3. Validasi Radio Button (Privasi)
+            const privasiSection = document.getElementById('privasi-section');
+            const radioOptions = document.querySelectorAll('input[name="privasi"]');
+            let radioIsChecked = false;
+            for (const radio of radioOptions) {
+                if (radio.checked) {
+                    radioIsChecked = true;
+                    break;
+                }
+            }
+            if (privasiSection && !radioIsChecked) {
+                privasiSection.classList.add('error');
+                privasiSection.querySelector('.error-message').style.display = 'block';
+                formIsValid = false;
+            }
+
+            // Jika semua validasi berhasil
+            if (formIsValid) {
+                alert("Formulir valid, laporan akan dikirim.");
+                // form.submit(); // Uncomment untuk mengaktifkan pengiriman form
+            } else {
+                alert("Mohon lengkapi semua data yang wajib diisi.");
+            }
+        });
+    }
+});
+</script>
+</body>
+</html>

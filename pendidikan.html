@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Pendaftaran - Pendidikan</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --background-light: #f4f7f9;
+            --card-background: #ffffff;
+            --text-dark: #333333;
+            --text-light: #555555;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: var(--card-background);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 850px;
+            max-width: 95%;
+            margin: 20px auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .title {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            width: calc(100% - 60px);
+            height: 3px;
+            background-color: var(--border-color);
+            top: 50%;
+            left: 30px;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step .circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--border-color);
+            color: var(--card-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 600;
+            margin-bottom: 10px;
+            transition: background-color 0.4s ease, transform 0.3s ease;
+        }
+
+        .step.active .circle {
+            background-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .step.completed .circle {
+            background-color: var(--success-color);
+            transform: scale(1.1);
+        }
+
+        .step-label {
+            font-size: 13px;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .step.completed + .step::before,
+        .step.completed + .step.active::before {
+            background-color: var(--success-color);
+        }
+        
+        .step-indicator .step:nth-child(3).completed::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--success-color);
+            top: 50%;
+            left: 100%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .step-indicator .step:nth-child(4).active::before {
+            background: linear-gradient(to right, var(--success-color) 50%, var(--border-color) 50%);
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+        
+        .form-section:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .form-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .form-group.invalid input,
+        .form-group.invalid select {
+            border-color: var(--danger-color);
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            color: var(--text-dark);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .form-group.full-width {
+            flex: 100%;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--card-background);
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: var(--danger-color);
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+            font-style: italic;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <div class="form-container">
+        <h1 class="title">FORMULIR PENDAFTARAN</h1>
+        <div class="step-indicator">
+            <div class="step completed">
+                <div class="circle">1</div>
+                <span class="step-label">Data Pribadi</span>
+            </div>
+            <div class="step completed">
+                <div class="circle">2</div>
+                <span class="step-label">Data Institusi & Kontak</span>
+            </div>
+            <div class="step completed">
+                <div class="circle">3</div>
+                <span class="step-label">Kontak Darurat</span>
+            </div>
+            <div class="step active">
+                <div class="circle">4</div>
+                <span class="step-label">Pendidikan</span>
+            </div>
+            <div class="step">
+                <div class="circle">5</div>
+                <span class="step-label">Upload Dokumen</span>
+            </div>
+        </div>
+        <form id="pendidikan-form">
+            <div class="form-section">
+                <h2>Pendidikan</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pilih-kursus">Kursus yang akan diikuti</label>
+                        <select id="pilih-kursus" name="pilih-kursus">
+                            <option value="">-- Pilih Kursus --</option>
+                            <option value="DIBI">DIBI</option>
+                            <option value="KIBI">KIBI</option>
+                            <option value="KIB ARAB">KIB ARAB</option>
+                            <option value="KIB JEPANG">KIB JEPANG</option>
+                            <option value="KIB JERMAN">KIB JERMAN</option>
+                            <option value="KIB KOREA">KIB KOREA</option>
+                            <option value="KIB MANDARIN">KIB MANDARIN</option>
+                            <option value="KIB PERANCIS">KIB PERANCIS</option>
+                            <option value="KIB RUSIA">KIB RUSIA</option>
+                            <option value="KIBINA">KIBINA</option>
+                        </select>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tahun-ajaran">Tahun Ajaran</label>
+                        <input type="text" id="tahun-ajaran" name="tahun-ajaran" class="year-picker" placeholder="Pilih Tahun" readonly>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="jurusan-umum">Jurusan pendidikan umum terakhir</label>
+                        <input type="text" id="jurusan-umum" name="jurusan-umum" placeholder="Masukkan jurusan pendidikan umum">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tahun-lulus-umum">Tahun lulus</label>
+                        <input type="text" id="tahun-lulus-umum" name="tahun-lulus-umum" class="year-picker" placeholder="Pilih Tahun" readonly>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="kampus-umum">Kampus pendidikan umum terakhir</label>
+                        <input type="text" id="kampus-umum" name="kampus-umum" placeholder="Masukkan nama kampus/sekolah">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pendidikan-kedinasan">Pendidikan kedinasan/militer terakhir</label>
+                        <input type="text" id="pendidikan-kedinasan" name="pendidikan-kedinasan" placeholder="Masukkan pendidikan kedinasan/militer">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tahun-lulus-kedinasan">Tahun lulus</label>
+                        <input type="text" id="tahun-lulus-kedinasan" name="tahun-lulus-kedinasan" class="year-picker" placeholder="Pilih Tahun" readonly>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tempat-kursus">Tempat kursus bahasa yang pernah diikuti</label>
+                        <input type="text" id="tempat-kursus" name="tempat-kursus" placeholder="Masukkan tempat kursus bahasa">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="tahun-lulus-kursus">Tahun lulus</label>
+                        <input type="text" id="tahun-lulus-kursus" name="tahun-lulus-kursus" class="year-picker" placeholder="Pilih Tahun" readonly>
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="kursus-bahasa">Kursus Bahasa yang Pernah diikuti</label>
+                        <input type="text" id="kursus-bahasa" name="kursus-bahasa" placeholder="Masukkan jenis kursus bahasa">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="tempat-pendidikan-terakhir">Tempat/lembaga pendidikan terakhir</label>
+                        <input type="text" id="tempat-pendidikan-terakhir" name="tempat-pendidikan-terakhir" placeholder="Masukkan tempat/lembaga pendidikan">
+                        <span class="error-message">Wajib diisi.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-secondary" type="button" onclick="window.location.href='kontak_darurat.html'">Kembali</button>
+                <button class="btn btn-primary" type="submit">Lanjut</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css">
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('pendidikan-form');
+
+        function loadSavedData() {
+            const savedData = localStorage.getItem('pendidikanData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                for (const key in data) {
+                    const element = document.getElementById(key);
+                    if (element) {
+                        element.value = data[key];
+                    }
+                }
+            }
+        }
+
+        flatpickr(".year-picker", {
+            dateFormat: "Y",
+            allowInput: false,
+            disableMobile: true,
+            plugins: [new monthSelectPlugin({
+                shorthand: false,
+                dateFormat: "Y",
+                altFormat: "Y",
+                theme: "light"
+            })],
+            onReady: function (selectedDates, dateStr, instance) {
+                instance.input.style.backgroundColor = '#f9f9f9';
+                instance.input.style.cursor = 'pointer';
+            }
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let allFieldsValid = true;
+            const formData = {};
+
+            const formElements = form.querySelectorAll('input, select'); // Tambah 'select' ke query
+
+            formElements.forEach(element => {
+                const formGroup = element.closest('.form-group');
+                const errorMessage = formGroup.querySelector('.error-message');
+                
+                if (element.value.trim() === "") {
+                    if (errorMessage) {
+                        formGroup.classList.add('invalid');
+                        errorMessage.style.display = 'block';
+                        allFieldsValid = false;
+                    }
+                } else {
+                    formGroup.classList.remove('invalid');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }
+
+                formData[element.id] = element.value.trim();
+            });
+
+            if (allFieldsValid) {
+                localStorage.setItem('pendidikanData', JSON.stringify(formData));
+                window.location.href = 'upload_dokumen.html';
+            } else {
+                alert('Mohon lengkapi semua data yang wajib diisi.');
+            }
+        });
+
+        const formElementsForInput = form.querySelectorAll('input, select'); // Tambah 'select'
+        formElementsForInput.forEach(element => {
+            element.addEventListener('input', function() {
+                const formGroup = this.closest('.form-group');
+                const errorMessage = formGroup.querySelector('.error-message');
+                if (this.value.trim() !== "") {
+                    formGroup.classList.remove('invalid');
+                    if (errorMessage) {
+                        errorMessage.style.display = 'none';
+                    }
+                }
+            });
+        });
+        
+        loadSavedData();
+    });
+    </script>
+</body>
+</html>

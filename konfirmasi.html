@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>KONFIRMASI DATA PENDAFTARAN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a69bd;
+            --accent-color: #7890c0;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-light: #ecf0f1;
+            --card-bg: #ffffff;
+            --border-color: #e4e6e7;
+            --success-color: #27ae60;
+            --success-hover: #2ecc71;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: var(--card-bg);
+            padding: 50px 60px;
+            border-radius: 16px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            font-size: 1.1em;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .data-section {
+            padding: 30px;
+            border-radius: 12px;
+            background-color: #fcfdfe;
+            margin-bottom: 35px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .data-section h3 {
+            color: var(--text-dark);
+            font-size: 1.5em;
+            margin-bottom: 25px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--accent-color);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px 50px;
+        }
+        
+        .data-item {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+        }
+        
+        .data-item label {
+            font-weight: 500;
+            color: var(--text-light);
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+        
+        .data-item p {
+            margin: 0;
+            font-size: 1em;
+            color: var(--text-dark);
+            word-wrap: break-word;
+            font-weight: 500;
+        }
+        
+        /* Gaya Tombol dan Konfirmasi tetap sama */
+        .btn-print { 
+            /* ... (styles for print button) */
+            display: block;
+            width: 300px;
+            margin: 30px auto 0;
+            padding: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+        }
+
+        .btn-print:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .btn-print:not(:disabled):hover {
+            background-color: var(--success-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .konfirmasi-wrapper {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 8px;
+            color: #856404;
+            max-width: 500px;
+            margin: 30px auto 0;
+        }
+
+        .konfirmasi-wrapper label {
+            font-weight: 500;
+            display: block;
+            cursor: pointer;
+        }
+        
+        /* ------------------------------------------- */
+        /* --- PRINT STYLES (Template Dokumen) --- */
+        /* ------------------------------------------- */
+        @page {
+            size: A4 portrait;
+            margin: 20mm; 
+        }
+
+        @media print {
+            body { 
+                background: #fff !important; 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                color: #000 !important; 
+                font-family: 'Times New Roman', serif;
+            }
+            .container { 
+                box-shadow: none !important; 
+                border-radius: 0 !important; 
+                padding: 0 !important; 
+                margin: 0 auto !important; 
+                max-width: 180mm !important; 
+                border: none !important;
+            }
+            
+            /* Sembunyikan semua elemen layar */
+            .judul-layar, .subtitle, .data-section, .btn-print, .konfirmasi-wrapper { 
+                display: none !important; 
+            }
+            
+            /* Tampilkan elemen template dokumen */
+            .print-template {
+                display: block !important;
+                page-break-after: auto; 
+            }
+
+            /* Header Logo & Judul */
+            .print-header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                margin-bottom: 20px;
+                border-bottom: 1px solid #000; 
+                padding-bottom: 10px;
+            }
+            .print-header img {
+                height: 70px; 
+                margin-bottom: 10px;
+                object-fit: contain;
+            }
+            .print-header h4 {
+                font-size: 11pt;
+                margin: 0;
+                font-weight: bold;
+                line-height: 1.2;
+                text-transform: uppercase;
+            }
+            .print-header h5 {
+                font-size: 13pt;
+                margin: 5px 0 0 0;
+                font-weight: 700;
+                text-decoration: underline;
+            }
+
+            /* Tata Letak Tabel */
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 10.5pt; 
+            }
+            .print-table td {
+                padding: 3px 0px; 
+                vertical-align: top;
+                height: 18px; 
+            }
+
+            .label-col {
+                width: 35%;
+                padding-right: 10px;
+            }
+            .separator-col {
+                width: 5%;
+                text-align: center;
+                font-weight: bold;
+            }
+            .data-col {
+                width: 50%; 
+                font-weight: normal;
+                word-wrap: break-word;
+            }
+
+            /* Bagian Foto */
+            .photo-cell {
+                width: 10%; 
+                text-align: center;
+                vertical-align: top;
+            }
+            .photo-cell #print-pas-foto {
+                display: block !important;
+                width: 30mm !important; 
+                height: 40mm !important;
+                border: 1px solid #000 !important;
+                padding: 2px !important;
+                margin: 0 auto;
+                object-fit: cover;
+            }
+            
+            /* Sub Judul Tabel */
+            .table-heading td {
+                font-weight: bold;
+                padding-top: 15px !important;
+                padding-bottom: 5px !important;
+                font-size: 11pt;
+                border-bottom: 1px solid #aaa;
+            }
+
+            /* Foto Passport di bawah */
+            #print-passport-section {
+                text-align: right;
+                margin-top: 25x !important;
+                page-break-before: auto;
+                page-break-inside: avoid;
+            }
+            #print-passport-section p {
+                 font-size: 9pt;
+                 margin-bottom: 5px;
+                 font-style: italic;
+                 font-weight: 600;
+                 text-align: right;
+                 margin-right: 10mm;  
+            }
+            #print-passport-section #print-passport-foto {
+                      width: 55mm;
+                      height: 40mm;
+                      border: 1px solid #000;
+                      padding: 3px;
+                      object-fit: contain;
+                      background-color: #fff;
+                      border-radius: 3px;
+                      display: inline-block;
+                      margin-right: 10mm;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="container" id="print-area">
+        <h1 class="judul-layar">Konfirmasi Data Pendaftaran</h1>
+        <p class="subtitle judul-layar">Silakan periksa kembali data Anda dengan teliti. Pastikan semua informasi sudah benar sebelum melanjutkan untuk mencetak.</p>
+
+        <section id="dokumen-data-section" class="data-section">
+            <h3>Dokumen</h3>
+            <div id="dokumen-data-content" style="display: flex; align-items: flex-start; gap: 40px;">
+                <img id="pas-foto-preview" src="#" alt="Pas Foto" style="width: 150px; height: 200px; display: none;">
+                <img id="passport-foto-preview" src="#" alt="Foto Passport" style="width: 150px; height: 200px; margin-left: 20px; display:none;"> 
+                <div class="dokumen-info-wrapper">
+                    <div class="data-item">
+                        <label>Pas Foto:</label>
+                        <p id="pas-foto-name">Belum ada foto</p>
+                    </div>
+                    <div class="data-item" id="passport-name-item" style="display:none;">
+                        <label>Foto Passport:</label>
+                        <p id="passport-foto-name">Belum ada foto</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="kursus-data-section" class="data-section">
+            <h3>Kursus yang Diikuti</h3>
+            <div class="data-grid"></div>
+        </section>
+
+        <section id="personal-data-section" class="data-section">
+            <h3>Data Pribadi</h3>
+            <div class="data-grid"></div>
+        </section>
+
+        <section id="institusi-data-section" class="data-section">
+            <h3>Data Institusi & Kontak</h3>
+            <div class="data-grid"></div>
+        </section>
+        
+        <section id="kontak-darurat-section" class="data-section">
+            <h3>Kontak Darurat</h3>
+            <div class="data-grid"></div>
+        </section>
+
+        <section id="pendidikan-data-section" class="data-section">
+            <h3>Pendidikan & Kursus Lain</h3>
+            <div class="data-grid"></div>
+        </section>
+
+        <div class="print-template" style="display:none;">
+            <div class="print-header">
+                <img src="logo kemhan.png" alt="Logo KEMHAN">
+                <h4>BADAN PENDIDIKAN DAN PELATIHAN KEMHAN</h4>
+                <h4>PUSAT PENDIDIKAN DAN PELATIHAN BAHASA</h4>
+                <h5>BIODATA SISWA</h5>
+            </div>
+
+            <table class="print-table">
+                <tr>
+                    <td class="label-col">Kursus yang akan diikuti</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-jenis-kursus"></td>
+                    <td class="photo-cell" rowspan="4">
+                        <img id="print-pas-foto" src="#" alt="Pas Foto" style="display:none;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label-col">Tahun Ajaran</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-tahun-ajaran"></td>
+                </tr>
+                <tr><td colspan="3">&nbsp;</td></tr>
+                <tr><td colspan="3">&nbsp;</td></tr>
+
+                <tr class="table-heading"><td colspan="4">Data Pribadi</td></tr>
+                <tr>
+                    <td class="label-col">Nama Lengkap</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-nama-lengkap" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Pangkat/Gol/Ruang/Korps</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-pangkat-gol-korps" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">NRP/NIP</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-nrp-nip" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Tempat, Tanggal Lahir</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-ttl" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Kategori usia (dalam tahun)</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-usia" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Jenis Kelamin</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-jenis-kelamin" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Status Pernikahan</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-status-pernikahan" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Agama</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-agama" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Kewarganegaraan</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-kewarganegaraan" colspan="2"></td>
+                </tr>
+                <tr id="print-no-id-passport-row">
+                    <td class="label-col">No. ID/Passport</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-no-id-passport" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Alamat Rumah</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-alamat-rumah" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Nomor Handphone</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-nomor-handphone" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Alamat Email Aktif</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-alamat-email-aktif" colspan="2"></td>
+                </tr>
+
+                <tr class="table-heading"><td colspan="4">Data Kedinasan & Kontak</td></tr>
+                <tr>
+                    <td class="label-col">Institusi</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-institusi" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Kesatuan</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-kesatuan" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Jabatan</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-jabatan" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Eselonisasi</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-eselonisasi" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Alamat Kantor</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-alamat-kantor" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Provinsi Kantor</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-provinsi-kantor" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Nomor Telepon Kantor</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-nomor-telepon-kantor" colspan="2"></td>
+                </tr>
+
+                <tr class="table-heading"><td colspan="4">Keluarga yang dapat dihubungi (Kontak Darurat)</td></tr>
+                <tr>
+                    <td class="label-col">Nama</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-nama-keluarga" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Nomor Telepon/HP</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-nomor-telepon-hp" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Alamat</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-alamat-keluarga" colspan="2"></td>
+                </tr>
+                
+                <tr class="table-heading"><td colspan="4">Pendidikan Terakhir</td></tr>
+                <tr>
+                    <td class="label-col">Umum</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-pendidikan-umum" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Jurusan/Tahun</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-jurusan-tahun" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Kampus</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-kampus" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Dinas/Militer</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-pendidikan-dinas-militer" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Tahun</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-tahun-dikmil" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Lemdik</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-lemdik" colspan="2"></td>
+                </tr>
+
+                <tr class="table-heading"><td colspan="4">Kursus bahasa yang pernah diikuti</td></tr>
+                <tr>
+                    <td class="label-col">Jenis Bahasa</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-jenis-bahasa"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Tempat/Tahun</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-tempat-tahun"></td>
+                </tr>
+
+                <tr class="table-heading"><td colspan="4">Lain-Lain</td></tr>
+                <tr>
+                    <td class="label-col">Ukuran Kemeja</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-ukuran-kemeja-final" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Ukuran Training Pack</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-ukuran-training-pack-final" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Akomodasi selama kursus</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-akomodasi-selama-kursus-final" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td class="label-col">Keterangan lain</td>
+                    <td class="separator-col">:</td>
+                    <td class="data-col" id="print-keterangan-lain-final" colspan="2"></td>
+                </tr>
+            </table>
+
+            <div id="print-passport-section" style="margin-top: 20px; text-align: right; display: none;">
+                <p>**PHOTO PASSPORT** (WNA)</p>
+                <img id="print-passport-foto" src="#" alt="Foto Passport">
+            </div>
+
+        </div>
+    </main>
+
+    <div class="konfirmasi-wrapper">
+        <label>
+            <input type="checkbox" id="konfirmasi-checkbox">
+            Saya sudah memeriksa dan memastikan data yang ditampilkan sudah benar.
+        </label>
+    </div>
+
+    <button id="cetak-pdf-btn" class="btn-print" disabled>Cetak Dokumen</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- FUNGSI MENGGABUNGKAN DAN MEMFORMAT DATA ---
+            // --- FUNGSI MENGGABUNGKAN DAN MEMFORMAT DATA ---
+function combineData() {
+    // Ambil semua data dari Local Storage
+    const personalData = JSON.parse(localStorage.getItem('personalData')) || {};
+    const institusiData = JSON.parse(localStorage.getItem('institusiData')) || {};
+    const kontakDaruratData = JSON.parse(localStorage.getItem('kontakDaruratData')) || {};
+    const pendidikanData = JSON.parse(localStorage.getItem('pendidikanData')) || {}; 
+    
+    // Gabungkan semua data ke dalam satu objek untuk memudahkan
+    const combined = {
+        ...personalData,
+        ...institusiData,
+        ...kontakDaruratData,
+        ...pendidikanData,
+        
+        // --- DATA YANG TELAH DIGABUNGKAN (LOGIC PERBAIKAN DIMULAI DI SINI) ---
+
+        // 1. UKURAN KEMEJA (handle 'Lainnya' - KODE INI HILANG, PERLU DITAMBAHKAN!)
+        // Prioritaskan nilai input 'kemeja-lainnya'. Jika kosong, fallback ke nilai select 'ukuran-kemeja'.
+        'ukuran-kemeja-final': personalData['kemeja-lainnya'] || personalData['ukuran-kemeja'] || '-',
+    
+        // 2. UKURAN TRAINING PACK (handle 'Lainnya' - Perbaikan logika agar lebih ringkas)
+        // Prioritaskan nilai input 'training-lainnya'. Jika kosong, fallback ke nilai select 'ukuran-training'.
+        'ukuran-training-pack-final': personalData['training-lainnya'] || personalData['ukuran-training'] || '-',
+
+        // 3. AKOMODASI MESS (handle 'Lainnya' - Perbaikan logika agar lebih ringkas)
+        // Prioritaskan nilai input 'akomodasi-lainnya'. Jika kosong, fallback ke nilai select 'akomodasi-mess'.
+        'akomodasi-selama-kursus-final': personalData['akomodasi-lainnya'] || personalData['akomodasi-mess'] || '-',
+     
+        // 4. KETERANGAN LAIN (Sudah benar)
+        'keterangan-lain-final': personalData['keterangan-lain'] || '-',
+        
+        // --- Data Kursus & Tahun Ajaran (Diambil dari pendidikan.html) ---
+        'jenis-kursus': pendidikanData['pilih-kursus'] || 'Belum Diisi',
+        'tahun-ajaran': pendidikanData['tahun-ajaran'] || '-',
+        
+        // ... (sisanya tidak diubah) ...
+        'pangkat-gol-korps': [
+            personalData['pangkat'] || '-',
+            personalData['gol-ruang'] || '-',
+            personalData['korps'] || '-'
+        ].filter(Boolean).join(' / '),
+        
+        'nama-lengkap': personalData['nama-lengkap'] || '-',
+        'ttl': (personalData['tempat-lahir'] || '-') + ', ' + (personalData['tanggal-lahir'] || '-'),
+        'nrp-nip': personalData['nrp'] || '-', // ✅ Tambahkan ini
+        'no-id-passport': personalData['no-id-passport'] || '-',
+        'alamat-rumah': personalData['alamat-rumah'] || institusiData['alamat-rumah'] || '-',
+        'alamat-email-aktif': personalData['alamat-email-aktif'] || personalData['email'] || institusiData['alamat-email-aktif'] || institusiData['email'] || '-',
+        'jurusan-tahun': (pendidikanData['jurusan-umum'] || '-') + (pendidikanData['tahun-lulus-umum'] ? ' / ' + pendidikanData['tahun-lulus-umum'] : ''),
+        'lemdik': pendidikanData['tempat-pendidikan-terakhir'] || '-',
+        'pendidikan-umum': pendidikanData['pendidikan-umum'] || '-',
+        'pendidikan-dinas-militer': pendidikanData['pendidikan-kedinasan'] || '-',
+        'tahun-dikmil': pendidikanData['tahun-lulus-kedinasan'] || '-',
+        'jenis-bahasa': pendidikanData['kursus-bahasa'] || '-',
+        'tempat-tahun': (pendidikanData['tempat-kursus'] || '-') + (pendidikanData['tahun-lulus-kursus'] ? ' / ' + pendidikanData['tahun-lulus-kursus'] : ''),
+        'kategori-usia': personalData['kategori-usia'] || '-',
+    };
+
+    return combined;
+}
+
+            // --- FUNGSI MENAMPILKAN DATA DI BROWSER PREVIEW (SCREEN) ---
+            function displayData(data) {
+                // Key mapping untuk preview layar
+                const displayKeysMap = {
+                    'Kursus': ['jenis-kursus', 'tahun-ajaran'],
+                    'Data Pribadi': ['nama-lengkap', 'pangkat-gol-korps', 'nrp-nip', 'ttl', 'kategori-usia', 'jenis-kelamin', 'status-pernikahan', 'agama', 'kewarganegaraan', 'no-id-passport', 'alamat-rumah', 'nomor-handphone', 'alamat-email-aktif'],
+                    'Data Institusi & Kontak': ['institusi', 'kesatuan', 'jabatan', 'eselonisasi', 'alamat-kantor', 'provinsi-kantor', 'nomor-telepon-kantor'],
+                    'Kontak Darurat': ['nama-keluarga', 'nomor-telepon-hp-keluarga', 'alamat-keluarga'],
+                    'Pendidikan & Kursus Lain': ['pendidikan-umum', 'jurusan-tahun', 'kampus-umum', 'pendidikan-dinas-militer', 'tahun-dikmil', 'lemdik', 'jenis-bahasa', 'tempat-tahun', 'ukuran-kemeja', 'ukuran-training-pack', 'akomodasi-selama-kursus', 'keterangan-lain']
+                };
+
+                // Hapus konten lama
+                document.getElementById('kursus-data-section').querySelector('.data-grid').innerHTML = '';
+                document.getElementById('personal-data-section').querySelector('.data-grid').innerHTML = '';
+                document.getElementById('institusi-data-section').querySelector('.data-grid').innerHTML = '';
+                document.getElementById('kontak-darurat-section').querySelector('.data-grid').innerHTML = '';
+                document.getElementById('pendidikan-data-section').querySelector('.data-grid').innerHTML = '';
+
+
+                // Mapping ID seksi dengan nama seksi
+                const sectionMap = {
+                    'Kursus': 'kursus-data-section',
+                    'Data Pribadi': 'personal-data-section',
+                    'Data Institusi & Kontak': 'institusi-data-section',
+                    'Kontak Darurat': 'kontak-darurat-section',
+                    'Pendidikan & Kursus Lain': 'pendidikan-data-section'
+                };
+
+
+                for (const sectionName in displayKeysMap) {
+                    const keys = displayKeysMap[sectionName];
+                    const section = document.getElementById(sectionMap[sectionName]);
+                    if (section) {
+                        const dataGrid = section.querySelector('.data-grid');
+                        keys.forEach(key => {
+                            const val = data[key];
+                            if (val && String(val).trim() !== '') {
+                                const dataItem = document.createElement('div');
+                                dataItem.className = 'data-item';
+                                let labelText = key.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+
+                                // Perbaikan Label Khusus
+                                if (key === 'pangkat-gol-korps') labelText = 'Pangkat/Gol/Ruang/Korps';
+                                if (key === 'ttl') labelText = 'Tempat, Tanggal Lahir';
+                                if (key === 'no-id-passport') labelText = 'No. ID/Passport';
+                                if (key === 'alamat-rumah') labelText = 'Alamat Rumah/No Telepon';
+                                if (key === 'jurusan-tahun') labelText = 'Jurusan Umum/Tahun';
+                                if (key === 'lemdik') labelText = 'Tempat Pendidikan Terakhir (Dinas/Militer)';
+                                if (key === 'pendidikan-umum') labelText = 'Pendidikan Umum Terakhir';
+                                if (key === 'pendidikan-dinas-militer') labelText = 'Pendidikan Dinas/Militer Terakhir';
+                                if (key === 'tahun-dikmil') labelText = 'Tahun Lulus Dikmil';
+                                if (key === 'jenis-bahasa') labelText = 'Jenis Bahasa Kursus Lain';
+                                if (key === 'tempat-tahun') labelText = 'Tempat/Tahun Kursus Lain';
+                                if (key === 'tahun-ajaran') labelText = 'Tahun Ajaran';
+                                if (key === 'jenis-kursus') labelText = 'Kursus yang akan diikuti';
+                                
+                                dataItem.innerHTML = `<label>${labelText}</label><p>${val}</p>`;
+                                dataGrid.appendChild(dataItem);
+                            }
+                        });
+                    }
+                }
+                
+                // --- Menampilkan Foto di Layar ---
+                const pasFotoUrl = localStorage.getItem('pasFotoFile');
+                const pasFotoPreview = document.getElementById('pas-foto-preview');
+                const pasFotoName = document.getElementById('pas-foto-name');
+                const passportFotoUrl = localStorage.getItem('fotoPassportFile');
+                const passportFotoPreview = document.getElementById('passport-foto-preview');
+                const passportNameItem = document.getElementById('passport-name-item');
+                const passportFotoName = document.getElementById('passport-foto-name');
+                const dokumenData = JSON.parse(localStorage.getItem('dokumenData')) || {};
+                const kewarganegaraan = ((combinedData && combinedData['kewarganegaraan']) || '').trim().toUpperCase();
+
+                // Pas Foto
+                if (pasFotoUrl) {
+                    pasFotoPreview.src = pasFotoUrl;
+                    pasFotoPreview.style.display = 'block';
+                    pasFotoName.textContent = dokumenData['pas-foto-input'] || "Pas Foto berhasil diunggah";
+                } else {
+                    pasFotoPreview.style.display = 'none';
+                    pasFotoName.textContent = "Tidak ada foto yang diunggah";
+                }
+
+                // Foto Passport (Hanya jika WNA)
+                if (kewarganegaraan && kewarganegaraan.includes('Warga Negara Asing')) {
+                    passportNameItem.style.display = 'flex';
+                    if (passportFotoUrl) {
+                        passportFotoPreview.src = passportFotoUrl;
+                        passportFotoPreview.style.display = 'block';
+                        passportFotoName.textContent = dokumenData['foto-passport-input'] || "Foto Passport berhasil diunggah";
+                    } else {
+                        passportFotoPreview.style.display = 'none';
+                        passportFotoName.textContent = "Tidak ada foto yang diunggah";
+                    }
+                } else {
+                    passportFotoPreview.style.display = 'none';
+                    passportNameItem.style.display = 'none';
+                }
+            }
+
+            // --- FUNGSI MENGISI TEMPLATE CETAK (PRINT) ---
+            function fillPrintTemplate(data) {
+                // Mapping antara ID print element (HTML) dan kunci data (Local Storage/combined)
+                const printMap = {
+                    // Kursus
+                    'print-jenis-kursus': 'jenis-kursus',
+                    'print-tahun-ajaran': 'tahun-ajaran',
+                    
+                    // Data Pribadi
+                    'print-nama-lengkap': 'nama-lengkap',
+                    'print-pangkat-gol-korps': 'pangkat-gol-korps', // GABUNGAN
+                    'print-nrp-nip': 'nrp-nip',
+                    'print-ttl': 'ttl', // GABUNGAN
+                    'print-usia': 'kategori-usia',
+                    'print-jenis-kelamin': 'jenis-kelamin',
+                    'print-status-pernikahan': 'status-pernikahan',
+                    'print-agama': 'agama',
+                    'print-kewarganegaraan': 'kewarganegaraan',
+                    'print-no-id-passport': 'no-id-passport', // GABUNGAN
+                    'print-alamat-rumah': 'alamat-rumah', // GABUNGAN
+                    'print-nomor-handphone': 'nomor-handphone',
+                    'print-alamat-email-aktif': 'alamat-email-aktif',
+
+                    // Data Kedinasan
+                    'print-institusi': 'institusi',
+                    'print-kesatuan': 'kesatuan',
+                    'print-jabatan': 'jabatan',
+                    'print-eselonisasi': 'eselonisasi',
+                    'print-alamat-kantor': 'alamat-kantor',
+                    'print-provinsi-kantor': 'provinsi-kantor',
+                    'print-nomor-telepon-kantor': 'nomor-telepon-kantor',
+
+                    // Kontak Darurat
+                    'print-nama-keluarga': 'nama-keluarga',
+                    'print-nomor-telepon-hp': 'nomor-telepon-hp-keluarga',
+                    'print-alamat-keluarga': 'alamat-keluarga',
+
+                    // Pendidikan
+                    'print-pendidikan-umum': 'jurusan-umum', // Asumsi Jurusan umum adalah nama pend. terakhir
+                    'print-jurusan-tahun': 'jurusan-tahun', // GABUNGAN (Jurusan & Tahun Lulus Umum)
+                    'print-kampus': 'kampus-umum',
+                    'print-pendidikan-dinas-militer': 'pendidikan-dinas-militer',
+                    'print-tahun-dikmil': 'tahun-dikmil',
+                    'print-lemdik': 'lemdik',
+                    
+                    // Kursus Bahasa
+                    'print-jenis-bahasa': 'jenis-bahasa', // Jenis kursus bahasa (dari 'kursus-bahasa')
+                    'print-tempat-tahun': 'tempat-tahun', // GABUNGAN (Tempat kursus & Tahun Lulus Kursus)
+
+                    // Lain-lain
+                    'print-ukuran-kemeja-final': 'ukuran-kemeja',
+                    'print-ukuran-training-pack-final': 'ukuran-training-pack-final',
+                    'print-akomodasi-selama-kursus-final': 'akomodasi-selama-kursus-final',
+                    'print-keterangan-lain-final': 'keterangan-lain',
+                    
+                };
+
+                for (const id in printMap) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        let value = data[printMap[id]];
+                        // Pastikan data tidak undefined/null, tampilkan '-' jika kosong
+                        element.textContent = value && String(value).trim() !== '' ? value : '-';
+                    }
+                }
+
+                // --- Foto Pas ---
+                const pasFotoUrl = localStorage.getItem('pasFotoFile');
+                const printPasFoto = document.getElementById('print-pas-foto');
+                if (pasFotoUrl) {
+                    printPasFoto.src = pasFotoUrl;
+                    printPasFoto.style.display = 'block';
+                } else {
+                    printPasFoto.style.display = 'none';
+                }
+
+                // --- Foto Passport ---
+                const passportFotoUrl = localStorage.getItem('fotoPassportFile');
+                const printPassportSection = document.getElementById('print-passport-section');
+                const printPassportFoto = document.getElementById('print-passport-foto');
+
+                if (data['kewarganegaraan'] && data['kewarganegaraan'].includes('Warga Negara Asing') && passportFotoUrl) {
+                    printPassportSection.style.display = 'block';
+                    printPassportFoto.src = passportFotoUrl;
+                } else {
+                    printPassportSection.style.display = 'none';
+                }
+            }
+
+// Ambil data. Asumsikan combineData() mengembalikan objek yang lengkap.
+const combinedData = combineData(); 
+// displayData() biasanya untuk mengisi form/tampilan sebelum cetak, ini tidak masalah.
+displayData(combinedData); 
+
+// **********************************************
+// 1. KOREKSI DATA DAN DEKLARASI KEWARGANEGARAAN (HANYA SATU KALI)
+// **********************************************
+const kewarganegaraan = (combinedData['kewarganegaraan'] || '').trim().toUpperCase();
+console.log("Status kewarganegaraan (bersih):", kewarganegaraan);
+console.log("Cek isi data sebelum koreksi:", {
+  "no-id-passport": combinedData['no-id-passport'],
+  "nrp-nip": combinedData['nrp-nip']
+});
+
+// ==========================
+// Validasi dan Koreksi Data
+// ==========================
+
+// 1️⃣ Pastikan NRP/NIP selalu diisi
+if (!combinedData['nrp-nip'] || combinedData['nrp-nip'].trim() === '') {
+    console.warn("⚠️ Data NRP/NIP wajib diisi untuk semua kewarganegaraan!");
+    alert("NRP/NIP wajib diisi sebelum mencetak!");
+    throw new Error("NRP/NIP kosong — proses cetak dihentikan.");
+}
+
+// 2️⃣ Logika khusus untuk WNI dan Non-WNI
+if (kewarganegaraan === 'WNI' || kewarganegaraan === 'WARGA NEGARA INDONESIA') {
+    // Jika WNI → No.ID/Passport boleh kosong
+    if (!combinedData['no-id-passport']) {
+        combinedData['no-id-passport'] = ''; // biarkan kosong
+        console.log("Data 'no-id-passport' dibiarkan kosong karena WNI.");
+    }
+} else {
+    // Jika bukan WNI → wajib isi No.ID/Passport
+    if (!combinedData['no-id-passport'] || combinedData['no-id-passport'].trim() === '') {
+        console.warn("⚠️ Data No. ID/Passport wajib diisi untuk non-WNI!");
+        alert("No. ID/Passport wajib diisi untuk non-WNI sebelum mencetak!");
+        throw new Error("No. ID/Passport kosong untuk non-WNI — proses cetak dihentikan.");
+    }
+    console.log("Data disesuaikan untuk non-WNI: NRP/NIP dan No.ID/Passport wajib ada.");
+}
+
+console.log("Cek isi data setelah koreksi:", {
+  "no-id-passport": combinedData['no-id-passport'],
+  "nrp-nip": combinedData['nrp-nip']
+});
+
+
+// **********************************************
+// 2. ISI TEMPLATE CETAK
+// **********************************************
+fillPrintTemplate(combinedData); 
+
+
+// **********************************************
+// 3. LOGIKA SEMBUNYIKAN/TAMPILKAN BARIS
+// **********************************************
+const passportRow = document.getElementById('print-no-id-passport-row');
+
+if (passportRow) {
+    if (kewarganegaraan === 'WNI' || kewarganegaraan === 'WARGA NEGARA INDONESIA') {
+        passportRow.style.display = 'none'; // Sembunyikan baris
+        console.log("Bagian No. ID/Passport disembunyikan karena WNI");
+    } else {
+        passportRow.style.display = 'table-row'; // Tampilkan baris
+        console.log("Bagian No. ID/Passport ditampilkan karena bukan WNI");
+    }
+}
+            const cetakBtn = document.getElementById('cetak-pdf-btn');
+            const checkbox = document.getElementById('konfirmasi-checkbox');
+
+            cetakBtn.disabled = true;
+
+            checkbox.addEventListener('change', function() {
+                cetakBtn.disabled = !this.checked;
+            });
+
+            cetakBtn.addEventListener('click', function() {
+                // Logika memuat gambar sebelum mencetak (dipertahankan dari solusi sebelumnya)
+                const pasFoto = document.getElementById('print-pas-foto');
+                const passportFoto = document.getElementById('print-passport-foto');
+                let imagesToLoad = [];
+
+                if (pasFoto && pasFoto.src && pasFoto.style.display !== 'none' && !pasFoto.complete) {
+                    imagesToLoad.push(pasFoto);
+                }
+                if (passportFoto && passportFoto.src && passportFoto.style.display !== 'none' && !passportFoto.complete) {
+                    imagesToLoad.push(passportFoto);
+                }
+
+              function doPrint() {
+    const combinedData = combineData();
+    const nama = (combinedData['nama-lengkap'] || 'TanpaNama').trim();
+    const kursus = (combinedData['jenis-kursus'] || 'TanpaKursus').trim();
+    const tahun = (combinedData['tahun-ajaran'] || 'TanpaTahun').trim(); // ✅ Tambahan baru
+    
+    // Simpan judul asli
+    const originalTitle = document.title; 
+
+    // Buat nama file (ini yang akan muncul di dialog "Simpan Sebagai")
+    const namaFile = `${nama}_${kursus}_${tahun}`.replace(/\s+/g, '_');
+    
+    // 1. **SETEL** judul
+    document.title = namaFile; 
+
+    // 2. Tunda sebentar (misal 500ms) untuk memastikan browser telah memperbarui judul
+    setTimeout(() => {
+        console.log("Print dimulai dengan title:", document.title);
+        window.print(); // Membuka dialog cetak
+
+        // 3. Kembalikan judul tab ke semula setelah 1 detik
+        setTimeout(() => {
+            document.title = originalTitle;
+        }, 1000); 
+    }, 500); // 500ms (0.5 detik) biasanya sudah aman
+}
+
+
+                if (imagesToLoad.length > 0) {
+                    let loadedCount = 0;
+                    imagesToLoad.forEach(img => {
+                        img.onload = () => {
+                            loadedCount++;
+                            if (loadedCount === imagesToLoad.length) {
+                                doPrint();
+                            }
+                        };
+                        img.onerror = img.onload;
+                    });
+                } else {
+                    doPrint();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
